@@ -3,9 +3,10 @@ pragma solidity ^0.8.10;
 
 import "./Marketplace.sol";
 import "./Task.sol";
+import "./Ownable.sol";
 
 
-contract Funder {
+contract Funder is Ownable {
 
     Marketplace private marketplace;
 
@@ -13,18 +14,16 @@ contract Funder {
         marketplace = _marketplace;
     }
 
-    function provideFunding(Task task, uint tokens) public {
-        require (task.getToken().balanceOf(address(this)) >= tokens);
-
-        task.getToken().approve(address(marketplace), tokens);
+    function provideFunding(Task task, uint tokens) public onlyOwner {
+        marketplace.getToken().approve(address(marketplace), tokens);
         marketplace.provideFunding(task, tokens);
     }
 
-    function retrieveFunding(Task task) public {
-        marketplace.retrieveFunding(task);
+    function retrieveFunding(Task task, uint tokens) public onlyOwner {
+        marketplace.retrieveFunding(task, tokens);
+    }
 
-        task.getToken().transferFrom(address(marketplace), address(this), marketplace.getDonatedSum(task));
-
-        marketplace.retrieveFunding(task);
+    function getMarketplace() public view returns (Marketplace) {
+        return marketplace;
     }
 }

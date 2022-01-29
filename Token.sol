@@ -3,17 +3,28 @@ pragma solidity ^0.8.10;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.0.0/contracts/token/ERC20/ERC20.sol";
 
-import "./Funder.sol";
-
-
 contract FIIToken is ERC20 {
+    uint private tokensPerFunder;
+    uint private tokenSupply;
+    address marketplaceAddress;
 
-    constructor(uint tokens, Funder[] memory funders) ERC20("FIIToken", "FII") {
-        uint tokensCount = tokens * (10 ** uint256(decimals()));
-        uint tokensPerFunder = tokensCount / funders.length;
+    constructor(uint _tokensPerFunder, uint _tokenSupply, address _marketplaceAddress) ERC20("FIIToken", "FII") {
+        tokensPerFunder = _tokensPerFunder;
+        tokenSupply = _tokenSupply;
+        marketplaceAddress = _marketplaceAddress;
 
-        for (uint i = 0; i < funders.length; i++) {
-            _mint(address(funders[i]), tokensPerFunder);
-        }
+        _mint(_marketplaceAddress, tokenSupply);
+    }
+
+    function getTokensPerFunder() public view returns (uint) {
+        return tokensPerFunder;
+    }
+
+    function getTokensSupply() public view returns (uint) {
+        return tokenSupply;
+    }
+
+    function decimals() public view override virtual returns (uint8) {
+        return 0;
     }
 }

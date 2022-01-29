@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.0.0/contracts/token/ERC20/ERC20.sol";
-
 import "./Marketplace.sol";
 import "./Manager.sol";
 
@@ -14,29 +12,33 @@ contract Task {
         WAITING_REVIEWER,
         WAITING_FREELANCER,
         STARTED,
+        MANAGER_NOTIFIED,
+        REVIEW_REQUESTED,
         FINISHED,
-        CANCELED
+        CANCELED,
+        FAILED
     }
 
     Marketplace private marketplace;
     string private description;
     string private domain;
-    ERC20 token;
     Manager private manager;
     uint private totalFreelancerBounty;
+    uint private currentBounty;
     uint private totalReviewerBounty;
+    string private proposedSolution;
     TaskState private taskState;   
 
-    constructor(Marketplace _marketplace, string memory _description, string memory _domain, ERC20 _token, Manager _manager, uint _totalFreelancerBounty, uint _totalReviewerBounty) {
+    constructor(Marketplace _marketplace, string memory _description, string memory _domain, Manager _manager, uint _totalFreelancerBounty, uint _totalReviewerBounty) {
         require (msg.sender == address(_marketplace));
         
         marketplace = _marketplace;
         description = _description;
         domain = _domain;
-        token = _token;
         manager = _manager;
         totalFreelancerBounty = _totalFreelancerBounty;
         totalReviewerBounty = _totalReviewerBounty;
+        currentBounty = 0;
         taskState = TaskState.PENDING;
     }
 
@@ -68,6 +70,42 @@ contract Task {
         taskState = TaskState.CANCELED;
     }
 
+    function evaluateByManager(bool response) public {
+        require (msg.sender == address(marketplace), "The evaluation can be updated only by the marketplace");
+        require (taskState == TaskState.MANAGER_NOTIFIED, "Evaluation must be done after notifying the manager");
+
+        taskState = response ? TaskState.FINISHED : TaskState.REVIEW_REQUESTED;
+    }
+
+    function evaluateByReviewer(bool response) public {
+        require (msg.sender == address(marketplace), "The review can be updated only by the marketplace");
+        require (taskState == TaskState.REVIEW_REQUESTED, "Review must be done after rejecting the solution by the manager");
+
+        taskState = response ? TaskState.FINISHED : TaskState.FAILED;
+    }
+
+    function incrementBounty(int value) public {
+        require(msg.sender == address(marketplace), "The bounty can be updated only by the marketplace");
+    
+        currentBounty = uint(value + int(currentBounty));
+        if(currentBounty >= totalReviewerBounty + totalFreelancerBounty)
+            taskState = TaskState.WAITING_REVIEWER;
+        else
+            taskState = TaskState.PENDING;
+    }
+
+    function setSolution(string memory _solution) public {
+        require (msg.sender == address(marketplace), "The solution can be updated only by the marketplace");
+        require (taskState == TaskState.STARTED, "The task has not yet started");
+
+        proposedSolution = _solution;
+        taskState = TaskState.MANAGER_NOTIFIED;
+    }
+
+    function getSolution() public view returns (string memory) {
+        return proposedSolution;
+    }
+
     function getManager() public view returns (Manager) {
         return manager;
     }
@@ -76,15 +114,31 @@ contract Task {
         return totalFreelancerBounty + totalReviewerBounty;
     }
 
-    function getToken() public view returns (ERC20) {
-        return token;
+    function getReviewerBounty() public view returns (uint) {
+        return totalReviewerBounty;
+    }
+
+    function getFreelancerBounty() public view returns (uint) {
+        return totalFreelancerBounty;
     }
 
     function getDomain() public view returns (string memory) {
         return domain;
     }
 
+    function getDescription() public view returns (string memory) {
+        return description;
+    }
+
     function canReceiveFunding() public view returns (bool) {
         return taskState == TaskState.PENDING;
+    }
+
+    function getTaskState() public view returns (uint) {
+        return uint(taskState);
+    }
+
+    function getCurrentBounty() public view returns (uint) {
+        return currentBounty;
     }
 }
