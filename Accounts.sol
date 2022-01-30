@@ -12,10 +12,12 @@ import "./Task.sol";
 // 3 - freelancers
 abstract contract Account is Ownable {    
     Marketplace internal marketplace;
-    uint accountType;
+    uint internal accountType;
+    string internal name;
 
-    constructor(Marketplace _marketplace) {
+    constructor(Marketplace _marketplace, string memory _name) {
         marketplace = _marketplace;
+        name = _name;
     }
 
     function getMarketplace() public view returns (Marketplace) {
@@ -25,10 +27,14 @@ abstract contract Account is Ownable {
     function getAccountType() public view returns (uint) {
         return accountType;
     }
+
+    function getName() public view returns (string memory) {
+        return name;
+    }
 }
 
 contract Manager is Account {
-    constructor(Marketplace _marketplace) Account(_marketplace) {
+    constructor(Marketplace _marketplace, string memory _name) Account(_marketplace, _name) {
         accountType = 0;
     }
 
@@ -54,7 +60,7 @@ contract Manager is Account {
 }
 
 contract Funder is Account {
-    constructor(Marketplace _marketplace) Account(_marketplace) {
+    constructor(Marketplace _marketplace, string memory _name) Account(_marketplace, _name) {
         accountType = 1;
     }
 
@@ -66,12 +72,16 @@ contract Funder is Account {
     function retrieveFunding(Task task, uint tokens) public onlyOwner {
         marketplace.retrieveFunding(task, tokens);
     }
+
+    function getDonatedSum(Task task) public view returns (uint) {
+        return marketplace.getDonatedSum(task);
+    }
 }
 
 contract Reviewer is Account {
     string private domain;
 
-    constructor(Marketplace _marketplace, string memory _domain) Account(_marketplace) {
+    constructor(Marketplace _marketplace, string memory _name, string memory _domain) Account(_marketplace, _name) {
         accountType = 2;
         domain = _domain;
     }
@@ -89,7 +99,7 @@ contract Freelancer is Account {
     string private domain;
     uint reputation;
 
-    constructor(Marketplace _marketplace, string memory _domain) Account(_marketplace) {
+    constructor(Marketplace _marketplace, string memory _name, string memory _domain) Account(_marketplace, _name) {
         accountType = 3;
         domain = _domain;
         reputation = 5;
