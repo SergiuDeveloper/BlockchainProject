@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js">
+
+    </script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.3/dist/web3.min.js">
+
+    </script>
+
+</head>
+
+<body>
+
+  
+        <div class="well">
+            <div>
+                <legend class="lead">Registration</legend>
+                <label class="lead">Your account: </label><span id='account_addr'></span><br>
+                <label class="lead">Marketplace address: </label><span id='mk_addr'></span>
+            </div>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">Name</label>
+
+                    <input class="form-control col-sm-10" type="text" id="name_signup" value="Name"></input>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">Domain</label>
+
+                    <input class="form-control col-sm-10" type="text" id="domain_signup" value="blockchain" placeholder="Required for Freelancer and Reviewer"></input>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm control-label">Account type</label>
+                    <select class="form-control selectpicker" name="accounts" id="accounts_types_signup">
+                        <option value="manager">Manager</option>
+                        <option value="funder">Funder</option>
+                        <option value="reviewer">Reviewer</option>
+                        <option value="freelancer">Freelancer</option>
+                    </select>
+                </div>
+
+                <div>
+                    <button class="btn btn-default" id="signup_button" type="button" onclick="signUp()">Sign up!</button><br>
+                </div>
+            </form>
+        </div>
+
+
+</body>
+<script src="connectEth.js"></script>
+<script src="variables.js"></script>
+<script src="marketInit.js"></script>
+
+</html>

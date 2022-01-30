@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js">
+
+  </script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">
+
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.5.3/dist/web3.min.js">
+
+  </script>
+
+</head>
+
+<body>
+  <div class="well well-large" id="main-container">
+    <div>
+      <legend class="lead-m">Freelancer account</legend>
+      <label class="lead">Your owner account: </label><span id='owner_addr'></span><br>
+      <label class="lead">Your freelancer account: </label><span id='freelancer_addr'></span><br>
+      <label class="lead">Your name: </label><span id='freelancer_name'></span><br>
+      <label class="lead">Marketplace address: </label><span id='mk_addr'></span><br>
+      <label class="lead">Your balance (FIITokens): </label><span id='token_balance'></span><br>
+      <label class="lead">Your reputation: </label><span id='reputation'></span><br>
+      <label class="lead">Your domain: </label><span id='domain'></span>
+
+    </div>
+
+    <form class="form-horizontal well well-small">
+      <legend class="lead">Buy FIITokens</legend>
+      <div class="form-group">
+        <label class="col-sm control-label">Amount (1 wei = 1 FIIToken)</label>
+        <input class="form-control col-sm-10" type="number" min="1" id="freelancer_buy_tokens" value="10"></input>
+      </div>
+
+      <div>
+        <button class="btn btn-default" id="freelancer_buy_tokens_button" type="button" onclick="buyTokens()">Buy
+          tokens!</button><br>
+      </div>
+    </form>
+
+
+    <legend class="lead-m" style="border-color: red;"><strong>My tasks</strong></legend>
+    <div id="my_tasks">
+      <!-- <div class="well well-small" id="task_1">
+            <legend class="lead">Task #1</legend>
+            <label class="col">Task address:</label><span id='task_1_addr'></span><br>
+            <label class="col"><strong>State:</strong> </label><span id='task_1_state' class="col text-warning">
+                asdasasd</span><br />
+            <label class="col"><strong>Domain:</strong> </label><span id='task_1_domain' class="col">
+                asdasasd</span><br />
+            <label class="col"><strong>Funding progress:</strong></label><br />
+            <label class="col"><strong>Description:</strong> </label>
+            <textarea class="form-control" id="task_1_descr" readonly></textarea>
+            <label style="display:none" class="col"><strong>Solution:</strong><br></label>
+            <textarea style="display:none" class="form-control" id="task_1_sol" readonly></textarea>
+            <br>
+            <button class="btn btn-danger" id="signup_button" type="button" onclick="addTask()">Cancel
+                task!</button><br>
+
+            <div class="btn-toolbar">
+             <button class="btn btn-danger" role="group" id="signup_button" type="button" onclick="addTask()">Reject
+                    solution!</button>
+                <button class="btn btn-success " role="group" id="signup_button" type="button" onclick="addTask()">Approve
+                    solution!</button>
+            </div>
+            
+            
+            <select class="col-sm-10">
+                <option value="manager">Manager</option>
+                <option value="funder">Funder</option>
+                <option value="reviewer">Reviewer</option>
+                <option value="freelancer">Freelancer</option>
+            </select> -->
+
+
+
+    </div>
+
+    <legend class="lead-m" style="border-color: red;"><strong>Browse tasks</strong></legend>
+    <div id="browse_tasks">
+
+    </div>
+  </div>
+
+
+</body>
+<script src="scripts/connectEth.js"></script>
+<script src="scripts/variables.js"></script>
+<script src="scripts/freelancerFunctions.js"></script>
+
+</html>

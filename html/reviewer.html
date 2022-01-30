@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js">
+
+  </script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">
+
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.5.3/dist/web3.min.js">
+
+  </script>
+
+</head>
+
+<body>
+  <div class="well well-large" id="main-container">
+    <div>
+      <legend class="lead-m">Reviewer account</legend>
+      <label class="lead">Your owner account: </label><span id='owner_addr'></span><br>
+      <label class="lead">Your reviewer account: </label><span id='reviewer_addr'></span><br>
+      <label class="lead">Your name: </label><span id='reviewer_name'></span><br>
+      <label class="lead">Marketplace address: </label><span id='mk_addr'></span><br>
+      <label class="lead">Your balance (FIITokens): </label><span id='token_balance'></span><br>
+      <label class="lead">Your domain: </label><span id='domain'></span>
+    </div>
+
+    <legend class="lead-m" style="border-color: red;"><strong>My tasks</strong></legend>
+    <div id="my_tasks">
+     
+    </div>
+  </div>
+
+
+</body>
+<script src="scripts/connectEth.js"></script>
+<script src="scripts/variables.js"></script>
+<script src="scripts/reviewerFunctions.js"></script>
+
+</html>
