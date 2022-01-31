@@ -2,8 +2,7 @@
 pragma solidity ^0.8.10;
 
 import "./Marketplace.sol";
-import "./Manager.sol";
-
+import "./Accounts.sol";
 
 contract Task {
 
