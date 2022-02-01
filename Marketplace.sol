@@ -350,6 +350,11 @@ contract Marketplace {
             freelancers[task].incrementReputation();
         } else {
             // pay the reviewer with freelancer's warranty
+            token.transferFrom(
+                address(this),
+                address(reviewers[task]),
+                task.getReviewerBounty()
+            );
             // retrieve the tokens to the funders
             for (uint i = 0; i < funders[task].length; i++)
                 token.transferFrom(
