@@ -1,8 +1,15 @@
 var contractAddress, mkAddr, marketplaceContract, funderContract, accountAddr, balance;
 var availableTasks = [];
 
+window.ethereum.on('accountsChanged', function (accounts) {
+  location.reload()
+})
+
 window.onload = async function init() {
-  contractAddress = await sessionStorage.getItem("ownerAddr");
+  const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+  contractAddress = accounts[0];
+  console.log(accounts);
+
   mkAddr = await localStorage.getItem("marketplaceAddress");
 
   marketplaceContract = new web3.eth.Contract(marketplaceABI, mkAddr);
@@ -217,7 +224,7 @@ async function displayTasks() {
 
     // add or retrieve funding
     let sumInput = document.createElement("input");
-    sumInput.className="col-sm-10";
+    sumInput.className = "col-sm-10";
     sumInput.type = "number";
     sumInput.min = 1;
     sumInput.value = 10;
@@ -231,34 +238,34 @@ async function displayTasks() {
     btn = document.createElement("button");
     btn.classList.add("btn");
     btn.classList.add("btn-danger");
-    btn.id = "task_" + (i+1) + "_reject";
-    btn.onclick = async function() {retrieveFunding(i); }
+    btn.id = "task_" + (i + 1) + "_reject";
+    btn.onclick = async function () { retrieveFunding(i); }
     btn.innerText = "Retrieve funding!";
     btn.disabled = parseInt(availableTasks[i]["donatedSum"]) == 0;
     btnDiv.appendChild(btn);
     btn = document.createElement("button");
     btn.classList.add("btn");
     btn.classList.add("btn-success");
-    btn.id = "task_" + (i+1) + "_approve";
-    btn.onclick = async function() {fund(i); }
+    btn.id = "task_" + (i + 1) + "_approve";
+    btn.onclick = async function () { fund(i); }
     btn.innerText = "Fund!";
     btn.disabled = parseInt(availableTasks[i]["donatedSum"]) > 0;
 
     btnDiv.appendChild(btn);
-    wellDiv.appendChild(btnDiv);  
+    wellDiv.appendChild(btnDiv);
 
     mainCont.appendChild(wellDiv);
   }
 }
 
 async function fund(index) {
-  let amount = parseInt(document.getElementById("task_" + (index+1) + "_fund_sum").value);
-  if(amount > balance) {
+  let amount = parseInt(document.getElementById("task_" + (index + 1) + "_fund_sum").value);
+  if (amount > balance) {
     alert("The amount you introduced exceeds your balance!");
     return;
   }
 
-  if(isNaN(amount) || amount < 1) {
+  if (isNaN(amount) || amount < 1) {
     alert("The amount field should not be empty or lower than 1!");
     return;
   }
@@ -279,15 +286,15 @@ async function fund(index) {
 }
 
 async function retrieveFunding(index) {
-  let amount = parseInt(document.getElementById("task_" + (index+1) + "_fund_sum").value);
-  let donated = parseInt(document.getElementById("task_" + (index+1) + "_donation").innerHTML);
+  let amount = parseInt(document.getElementById("task_" + (index + 1) + "_fund_sum").value);
+  let donated = parseInt(document.getElementById("task_" + (index + 1) + "_donation").innerHTML);
 
-  if(isNaN(amount) || amount < 1) {
+  if (isNaN(amount) || amount < 1) {
     alert("The amount field should not be empty or lower than 1!");
     return;
   }
 
-  if(amount > donated) {
+  if (amount > donated) {
     alert("You can't withdraw more than you funded!");
     return;
   }

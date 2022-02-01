@@ -2,8 +2,15 @@ var contractAddress, mkAddr, marketplaceContract, balance, domain, accountAddr, 
 var biddableTasks = [];
 var myTasks = [];
 
+window.ethereum.on('accountsChanged', function (accounts) {
+  location.reload()
+})
+
 window.onload = async function init() {
-  contractAddress = await sessionStorage.getItem("ownerAddr");
+  const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+  contractAddress = accounts[0];
+  console.log(accounts);
+
   mkAddr = await localStorage.getItem("marketplaceAddress");
 
   marketplaceContract = new web3.eth.Contract(marketplaceABI, mkAddr);
@@ -170,8 +177,8 @@ async function displayMyTasks() {
     let btn = document.createElement("button");
     btn.classList.add("btn");
     btn.classList.add("btn-success");
-    btn.id = "task_" + (i+1) + "_submit_solution";
-    btn.onclick = async function() {submitSolution(i); }
+    btn.id = "task_" + (i + 1) + "_submit_solution";
+    btn.onclick = async function () { submitSolution(i); }
     btn.innerText = "Submit solution";
     wellDiv.appendChild(btn);
 
@@ -183,7 +190,7 @@ async function displayMyTasks() {
 async function submitSolution(index) {
   let solution = document.getElementById("task_" + (index + 1) + "_solution").value;
 
-  if(solution == "") {
+  if (solution == "") {
     alert("You can't submit empty solutions!");
     return;
   }
@@ -280,12 +287,12 @@ async function displayBiddableTasks() {
     let btn = document.createElement("button");
     btn.classList.add("btn");
     btn.classList.add("btn-success");
-    btn.id = "task_" + (i+1) + "_bid";
-    btn.onclick = async function() {bidTask(i); }
+    btn.id = "task_" + (i + 1) + "_bid";
+    btn.onclick = async function () { bidTask(i); }
     btn.innerText = "Bid!";
     btn.disabled = !biddableTasks[i]["canBid"];
     wellDiv.appendChild(btn);
-    
+
     mainCont.appendChild(wellDiv);
   }
 }
@@ -402,7 +409,7 @@ async function hasBid(taskAddress) {
 
 
 async function bidTask(index) {
-  if(balance < biddableTasks[index]["reviewerBounty"]) {
+  if (balance < biddableTasks[index]["reviewerBounty"]) {
     alert("You don't have sufficient tokens to bid!\nYou need " + biddableTasks[index]["reviewerBounty"] + " tokens!");
     return;
   }

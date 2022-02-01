@@ -2,8 +2,15 @@ var contractAddress, mkAddr, marketplaceContract, managerContract, accountAddr;
 var managerTasks = [];
 var reviewers = [];
 
+window.ethereum.on('accountsChanged', function (accounts) {
+  location.reload()
+})
+
 window.onload = async function init() {
-  contractAddress = await sessionStorage.getItem("ownerAddr");
+  const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+  contractAddress = accounts[0];
+  console.log(accounts);
+
   mkAddr = await localStorage.getItem("marketplaceAddress");
 
   marketplaceContract = new web3.eth.Contract(marketplaceABI, mkAddr);

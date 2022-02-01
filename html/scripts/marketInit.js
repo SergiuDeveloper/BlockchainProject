@@ -1,5 +1,9 @@
 var mkAddr, contractAddress, marketplaceContract;
 
+window.ethereum.on('accountsChanged', function (accounts) {
+    location.reload()
+})
+
 window.onload = async function init() {
 
     // RPC methods https://eips.ethereum.org/EIPS/eip-1474
@@ -17,12 +21,12 @@ window.onload = async function init() {
 
         let payload = {
             data: marketplaceBytecode,
-            arguments: [20, 1000]
+            arguments: [20, 10000]
         }
 
         let parameter = {
-            from: contractAddress,
-            gas: web3.utils.toHex(5000000)
+            from: contractAddress
+            //gas: web3.utils.toHex(5000000)
             // gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei'))
         }
 
@@ -61,7 +65,7 @@ window.onload = async function init() {
         window.location.href = actualAccountType + ".html";
     }
 
-    
+
 
     document.getElementById("account_addr").innerHTML = contractAddress;
     document.getElementById("mk_addr").innerHTML = mkAddr;
@@ -149,6 +153,6 @@ async function signUp() {
     }
 
     console.log(actualAccountType)
-    
+
     window.location.href = actualAccountType + ".html";;
 }
